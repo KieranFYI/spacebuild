@@ -6,13 +6,11 @@ DEFINE_BASECLASS("base_sb_environment")
 
 function ENT:Initialize()
 	BaseClass.Initialize(self)
-	self:PhysicsInit(SOLID_NONE)
-	self:SetMoveType(MOVETYPE_NONE)
-	self:SetSolid(SOLID_NONE)
+
 	self.sbenvironment.temperature2 = 0
 	self.sbenvironment.sunburn = false
 	self.sbenvironment.unstable = false
-	self:SetNotSolid(true)
+
 	self:DrawShadow(false)
 
 	if CAF then
@@ -21,6 +19,12 @@ function ENT:Initialize()
 		self.caf.custom.canreceivedamage = false
 		self.caf.custom.canreceiveheatdamage = false
 	end
+end
+
+function ENT:SBEnvPhysics(ent)
+	local size = self:GetSize()
+	ent:SetCollisionBounds(Vector(-size, -size, -size), Vector(size, size, size))
+	ent:PhysicsInitBox(Vector(-size, -size, -size), Vector(size, size, size))
 end
 
 function ENT:GetSunburn()

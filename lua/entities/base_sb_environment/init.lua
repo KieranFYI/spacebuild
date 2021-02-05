@@ -35,7 +35,23 @@ function ENT:Initialize()
 		name = "No Name"
 	}
 
+	self.physEnt = ents.Create("base_sb_environment_collider")
+	self.physEnt:Spawn()
+	self.physEnt:Activate()
+	self:DeleteOnRemove(self.physEnt)
+	self:SBUpdatePhysics()
+
 	CAF.GetAddon("Spacebuild").AddEnvironment(self)
+end
+
+function ENT:SBUpdatePhysics()
+	self.physEnt:SetEnvironment(self)
+end
+
+function ENT:SBEnvPhysics(ent)
+	local size = self:GetSize()
+	ent:PhysicsInitSphere(size)
+	ent:SetCollisionBounds(Vector(-size, -size, -size), Vector(size, size, size))
 end
 
 local ignore = {"o2per", "co2per", "nper", "hper", "emptyper", "max"}
@@ -772,6 +788,8 @@ function ENT:CreateEnvironment(gravity, atmosphere, pressure, temperature, o2, c
 	end
 
 	self.sbenvironment.air.max = math.Round(100 * 5 * (self:GetVolume() / 1000) * self.sbenvironment.atmosphere)
+
+	self:SBUpdatePhysics()
 end
 
 function ENT:UpdateSize(oldsize, newsize)
@@ -858,6 +876,8 @@ function ENT:UpdateSize(oldsize, newsize)
 				self.sbenvironment.air.h = self.sbenvironment.air.max + tomuch
 			end
 		end
+
+		self:SBUpdatePhysics()
 	end
 end
 
