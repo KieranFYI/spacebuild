@@ -7,7 +7,7 @@ CreateConVar("LS_AllowNukeEffect", "1") --Update to something changeable later o
 local SB_AIR_O2 = 0
 local SB_AIR_CO2 = 1
 
-local RD = CAF.GetAddon("Resource Distribution")
+local RD
 
 LS.generators = {}
 LS.generators.air = {}
@@ -74,7 +74,7 @@ end
 ]]
 function LS.__Construct()
 	if status then return false, CAF.GetLangVar("This Addon is already Active!") end
-	local RD = CAF.GetAddon("Resource Distribution")
+	RD = CAF.GetAddon("Resource Distribution")
 	if not RD or not RD.GetStatus() then return false, CAF.GetLangVar("Resource Distribution is Required and needs to be Active!") end
 	util.PrecacheSound("vehicles/v8/skid_lowfriction.wav")
 	util.PrecacheSound("NPC_Stalker.BurnFlesh")
